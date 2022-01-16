@@ -26,14 +26,30 @@ function start(){
     }
 
     function createEngineer(){
-
+        inquirer.prompt([
+            {
+                type:'Input',
+                name: 'engineerName',
+                message:'What is the engineeer name?'
+            }
+        
+        ])
     }
 
     function createIntern(){
-
+        inquirer.prompt([
+            {
+                type:'Input',
+                name: 'internName',
+                message:'What is the intern name?'
+            }
+        
+        ])
     }
 
     createManager();
+    createEngineer();
+    createIntern();
 }
 
 start()
