@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const employeeTeam = require( './lib/main.js')
 const path = require('path');
 const fs = require('fs');
 
@@ -10,7 +11,7 @@ const main = require('./lib/html.js')
 const outputHTML = path.resolve(__dirname, 'output', 'team.html')
 
 const teamMembers = [];
-const arrayID = [];
+// const arrayID = [];
 
 function start(){
 
@@ -38,10 +39,8 @@ function start(){
             }, 
            
         ]).then(answers => { 
-            const manager = new Manager( answers.managerName, answers.employeeID, answers.emailAddress, answers.officeNumber )
-            teamMembers.push(manager);
-            arrayID.push(manager.id)
-            
+            teamMembers.push( new Manager ( answers.managerName, answers.employeeID, answers.emailAddress, answers.officeNumber ));
+            // arrayID.push(manager.id)
             buildTeam();
         })
         
@@ -67,6 +66,7 @@ function start(){
                     exit();
                     break;
                 default:
+                    console.log("lkdf")
                     break;
             }
         })
@@ -97,10 +97,8 @@ function start(){
             }, 
         
         ]).then(answers => { 
-            const engineer = new Engineer( answers.engineerName, answers.employeeID, answers.emailAddress, answers.githubUsername )
-            teamMembers.push(engineer);
-            console.log("here")
-            arrayID.push(engineer.id)
+            teamMembers.push( new Engineer ( answers.engineerName, answers.employeeID, answers.emailAddress, answers.githubUsername ));
+            // arrayID.push(engineer.id)
             
             buildTeam();
         })
@@ -129,7 +127,9 @@ function start(){
                     exit();
                     break;
                 default:
+                    console.log("hello")
                     break;
+                    
             }
         })
     }
@@ -159,10 +159,9 @@ function start(){
             }, 
         
         ]).then(answers => { 
-            const intern = new Intern( answers.internName, answers.employeeID, answers.emailAddress, answers.schoolName )
-            teamMembers.push(intern);
-            arrayID.push(intern.id)
-            
+            teamMembers.push( new Intern (answers.internName, answers.employeeID, answers.emailAddress, answers.schoolName ));
+            // arrayID.push(intern.id)
+            console.log("team")
             buildTeam();
         })
     };
@@ -190,23 +189,30 @@ function start(){
                     exportTeam();
                     break;
                 default:
+                    console.log("team")
                     break;
+                    
             }
         })
     }
 
     function exportTeam() {
-                fs.writeFileSync('main.js', mainjs({
-                    ...answers
-                }), (err) => {
-                    if (err) {
-                        console.log('Err: ', err)
-                    }else{
-                        console.log('Worker information successfully created')
-                    }
-                })
+        writeToFile("test.html", employeeTeam(teamMembers))//, (err) => {
+                    // if (err) {
+                    //     console.log('Err: ', err)
+                    // }else{
+                    //     console.log('Worker information successfully created')
+                    // }
+                // }
               };
             
+
+    function writeToFile(fileName, data) {
+
+    // file name and data
+    fs.writeFileSync(
+    path.join("dist", fileName), data )
+            }
 
     createManager();
   
