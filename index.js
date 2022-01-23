@@ -10,6 +10,7 @@ const main = require('./lib/html.js')
 
 const outputHTML = path.resolve(__dirname, 'output', 'team.html')
 
+// const thing = [];
 const teamMembers = [];
 // const arrayID = [];
 
@@ -41,6 +42,8 @@ function start(){
         ]).then(answers => { 
             teamMembers.push( new Manager ( answers.managerName, answers.employeeID, answers.emailAddress, answers.officeNumber ));
             // arrayID.push(manager.id)
+            console.log(answers)
+            console.log(teamMembers)
             buildTeam();
         })
         
@@ -54,22 +57,32 @@ function start(){
                 message:'Would you like to add another manager, an engineer, or exit out?',
                 choices: ['Engineer', 'Intern', 'Done']
             }, 
-        ]).then(answers => {
-            switch (answers.employeeChoice) {
-                case "Engineer":
-                    createEngineer();
-                    break;
-                case "Intern":
-                    createIntern();
-                    break;
-                case "Done":
-                    exit();
-                    break;
-                default:
-                    console.log("lkdf")
-                    break;
+        ]).then((answers) => {
+            if(answers.employeeChoice == 'Engineer') { // IF `Add Engineer` -> `Ask for engineer info`
+                createEngineer();
+            } else if (answers.employeeChoice == 'Intern') { // IF `Add Intern` -> `Ask for intern info`
+                createIntern();
+            } else {
+                // By passing employees to generateHTML this pushes the class that was pushed in the init function this is referencing the file not the function
+                writeToFile("test.html", employeeTeam(teamMembers)); // IF `All done` -> `build an html page`
             }
         })
+        // .then(answers  => {
+        //     switch (answers.employeeChoice) {
+        //         case "Engineer":
+        //             createEngineer();
+        //             break;
+        //         case "Intern":
+        //             createIntern();
+        //             break;
+        //         case "Done":
+        //             exit();
+        //             break;
+        //         default:
+        //             console.log("lkdf")
+        //             break;
+        //     }
+        // })
     }
 
 
@@ -93,46 +106,17 @@ function start(){
             {
                 type:'Input',
                 name: 'githubUsername',
-                message:'What is the engineer office number?'
+                message:'What is the engineer github username?'
             }, 
         
         ]).then(answers => { 
             teamMembers.push( new Engineer ( answers.engineerName, answers.employeeID, answers.emailAddress, answers.githubUsername ));
             // arrayID.push(engineer.id)
+            console.log(teamMembers)
             
             buildTeam();
         })
     };
-
-    function buildTeam() {
-        inquirer.prompt([
-            {
-                type:'list',
-                name: 'employeeChoice',
-                message:'Would you like to add another manager, an intern, or exit out?',
-                choices: ['Manager','Engineer', 'Intern', 'Done']
-            }, 
-        ]).then(answers => {
-            switch (answers.employeeChoice) {
-                case "Manager":
-                    createManager();
-                    break;
-                case "Engineer":
-                    createEngineer();
-                    break;
-                case "Intern":
-                    createIntern();
-                    break;
-                case "Done":
-                    exit();
-                    break;
-                default:
-                    console.log("hello")
-                    break;
-                    
-            }
-        })
-    }
 
 
     function createIntern(){
@@ -161,7 +145,7 @@ function start(){
         ]).then(answers => { 
             teamMembers.push( new Intern (answers.internName, answers.employeeID, answers.emailAddress, answers.schoolName ));
             // arrayID.push(intern.id)
-            console.log("team")
+            
             buildTeam();
         })
     };
@@ -175,24 +159,8 @@ function start(){
                 choices: ['Manager','Engineer', 'Intern', 'Done']
             }, 
         ]).then(answers => {
-            switch (answers.employeeChoice) {
-                case "Manager":
-                    createManager();
-                    break;
-                case "Engineer":
-                    createEngineer();
-                    break;
-                case "Intern":
-                    createIntern();
-                    break;
-                case "Done":
-                    exportTeam();
-                    break;
-                default:
-                    console.log("team")
-                    break;
-                    
-            }
+              exportTeam();      
+         
         })
     }
 
